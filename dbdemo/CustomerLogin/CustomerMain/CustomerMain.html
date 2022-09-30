@@ -1,0 +1,684 @@
+
+@model dbdemo.CustomerMain
+@{
+    ViewBag.Title = "CustomerMain";
+    Layout = null;
+}
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width" />
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script id="bolt" src="https://sboxcheckout-static.citruspay.com/bolt/run/bolt.min.js" bolt-color="e34524" bolt-logo="http://boltiswatching.com/wp-content/uploads/2015/09/Bolt-Logo-e14421724859591.png"></script>
+<!-- BOLT Production/Live //-->
+<!--// script id="bolt" src="https://checkout-static.citruspay.com/bolt/run/bolt.min.js" bolt-color="e34524" bolt-logo="http://boltiswatching.com/wp-content/uploads/2015/09/Bolt-Logo-e14421724859591.png"></script //-->
+<script src="~/Scripts/jquery.validate.js"></script>
+
+@*<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/popper.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    @Scripts.Render("~/bundles/css")
+        @Scripts.Render("~/bundles/jquery")*@
+<title>Customer</title>
+<style>
+    .btn-file {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: inherit;
+            display: block;
+        }
+    .rechargetxt {
+        width: 70% !important;
+        text-align: center;
+        margin: auto;
+    }   .sidenav1 {
+        background-color: #000000;
+        font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+        height: 100%;
+        font-size: 22px;
+        color: #999;
+        width: auto;
+        padding-top: 70px;
+        text-align: center;
+    }  .sidenav1 a {
+        display: block;
+        color: #999;
+        text-align: center;
+        padding-right: 20px;
+    }
+
+    a {
+        text-decoration: none;
+        width: 100% !important;
+    }   .sidenav1 li:hover {
+        /* background-color: #2a40a5; */
+        color: white;
+    }  .sidenav1 li a:hover {
+        text-decoration: none;
+        color: white !important;
+        /* background-color: #2a40a5; */
+    }
+
+    body {
+        background: url(../Images/login2.png) no-repeat center center fixed;
+        background-size: cover;
+    }
+
+
+    ul {
+        list-style: none;
+        padding-left: 0px !important;
+    }   .sidenav1 li a {
+        padding-left: 20px;
+        width: 100%;
+    }
+
+    .active a {
+        /* background-color:white; */
+        text-decoration: none;
+        color: white;
+    }
+
+    .main-content1 {
+        PADDING-top: 4%;
+        padding-left: 25px;
+    }
+
+    .content1 {
+        padding: 10px;
+        border-radius: 25px;
+        margin-left: 20px;
+        margin-right: 20px;
+        background-color: #ffffffbd;
+    }
+
+    #Profile {
+        font-size: large;
+        font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    }
+
+    label {
+        margin-bottom: 0px !important;
+        font-weight:300 !important;
+    }
+
+    .cbwindow {
+        background-color: #232968;
+        color: white;
+        padding: 70px;
+        border-radius: 25px;
+        font-size: 40px;
+        text-align: center;
+    }
+</style>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">WebSiteName</a>
+        </div>
+        <ul class="nav navbar-nav"></ul>
+        <ul class="nav navbar-nav navbar-right">
+
+            <li><a href="../HomeNavigate/HomeNavigate"><span class="glyphicon glyphicon-log-in"></span> Logout<br /><label id="session" style="font-size:small">@Model.lastlogin</label></a></li>
+        </ul>
+    </div>
+</nav>
+<script>
+    $(document).bind("contextmenu", function (e) {
+        e.preventDefault();
+    });
+</script>
+<div class="container-fluid" style="margin-top:30px">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="affix sidenav1">
+                <img id="img" src=@Url.Action( "GetUserImage", "CustomerMain", new { id = Model.cuid } ) height="80px" width="80px" class="img-circle" />
+                <h4 style="margin-left:0%;"><label id="Customer">@Model.fname @Model.lname</label></h4>
+                <h5 style="margin-left:0%;"><label>[Welcome Customer]</label></h5><br />
+                <ul>
+                    <li><a href="#" id="PT" style="border:1px solid;border-radius:10px;background-color:lightgreen;color:black;font-family:'Times New Roman'">Purchase Tag</a></li>
+                    <li><a href="#" id="CB" style="border:1px solid;border-radius:10px;background-color:lightgreen;color:black;font-family:'Times New Roman';margin-top:4%">Current Balance</a></li>
+                    <li><a href="#" id="RC" style="border:1px solid;border-radius:10px;background-color:lightgreen;color:black;font-family:'Times New Roman';margin-top:4%">Recharge</a></li>
+                    <li><a href="#" id="TS" style="border:1px solid;border-radius:10px;background-color:lightgreen;color:black;font-family:'Times New Roman';margin-top:4%">Transaction</a></li>
+                    <li><a href="#" id="PF" style="border:1px solid;border-radius:10px;background-color:lightgreen;color:black;font-family:'Times New Roman';margin-top:4%">Profile</a></li>
+                    <li><a href="#" id="HD" style="border:1px solid;border-radius:10px;background-color:lightgreen;color:black;font-family:'Times New Roman';margin-top:4%">Contact HelpDesk</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-10 main-content1 text-center">
+            <div class="col-md-2"></div>
+            <div class="content1 text-center" id="PurchaseTag">
+                <h2 style="text-align:center">Purchase A New Tag</h2>
+                <label class="control-label">
+                    <br />
+                    =============******Welcome to the Purchase A New Tag*******==============
+                </label>
+                <br />
+                <h4 style="text-align:left">
+                    <label class="control-label">
+                        <br />
+                        Please Read below instruction carefully before doing the transaction.
+                    </label>
+                </h4>
+                <h4 style="text-align:left">
+                    <label class="control-label">
+                        Cost = Rs. 50 per Tag
+                    </label>
+                </h4>
+                <h4 style="text-align:left">
+                    <label class="control-label">
+                        How do you want to procure the Tag ?
+                    </label>
+                </h4>
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="control-label" for="red1">
+                                    Via courier/Postal Service
+                                </label>
+                                <input type="radio" id="rad1" name="transmedia" value="1" checked="checked" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="control-label" for="red2">
+                                    Via nearest Service Provider
+                                </label>
+                                <input type="radio" id="rad2" name="transmedia" value="0" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="control-label">
+                            Cost             = Rs. 50 per tag
+                        </label>
+                        <br />
+                        <label class="control-label" name="withtrans">
+                            +
+                        </label>
+                        <br name="withtrans" />
+                        <label class="control-label" name="withtrans">
+                            Courier Service  = Rs. 10 per order ( Max 5 Tags )
+                        </label>
+                        <br name="withtrans" />
+                        <label class="control-label">
+                            ====================================
+                        </label>
+                        <br />
+                        <label class="control-label" name="withtrans">
+                            Total            = Rs. 60.00
+                        </label>
+
+                        <label class="control-label" name="wotrans" style="display:none">
+                            Total            = Rs. 50.00
+                        </label>
+
+                        <label class="control-label" name="rechargeamt" style="display:none">
+                            Total            = Rs. 50.00
+                        </label>
+                    </div>
+                    <div class="col-md-6">
+                        <h2 style="text-align:right">
+                            <button class="btn-primary" id="btnPayForTag" onclick="payForNewTag()">Pay for New Tag</button>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="content1 text-center" id="CurrentBalance">
+                <h2 style="text-align:center">Current Tag Balance</h2>
+                <table class="table text-center">
+                    <thead>
+                        <tr style="text-align:center">
+                            <td><b>Tag ID</b></td>
+                            <td><b>Balance</b></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var trans in Model.Tags)
+                        {
+                            <tr style="text-align:center">
+                                <td width="33%"><label id="TagId1">@trans.Tag_id</label></td>
+                                <td width="33%" class="text-center"><label id="Balance1">@trans.Total_amount</label></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table><br />
+                <br />
+
+                <label class="control-label" name="note">
+                    Note : UT* = Unassigned Tag
+                    UT_{user_id}_{count_of_unassigned_tags}
+                </label>
+
+            </div>
+            <div class="content1 text-center" id="Recharge">
+                <h2 style="text-align:center">Recharge</h2>
+                <label class="control-label">
+                    =============******Welcome to Recharge Customer Tag*******==============
+                    <br />
+                </label>
+
+                <div class="form-group">
+                    <table id="taglist" class="table text-center">
+                        <thead>
+                            <tr style="text-align:center">
+                                <td><b>Tag ID</b></td>
+                                <td><b>Amount</b></td>
+                                <td><b>Recharge</b></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var tag in Model.Tags)
+                            {
+                                <tr>
+                                    @*if(tag.Tag_id ='NO'){*@
+                                    <td width="33%"><label id="TagId2">@tag.Tag_id</label></td>
+                                    <td width="33%"><input class="form-control rechargetxt" type="text" placeholder="Enter the Amount" id="TagAmount" value="" /></td>
+                                    <td width="33%"><button class="btn-primary" onclick="payforrecharge(event)">Pay to Recharge</button></td>
+                                    @*}
+                                else
+                                {
+                                <td width="33%">&nbsp;</td>
+                                <td width="33%">&nbsp;</td>
+                                <td width="33%">&nbsp;</td>
+                                }*@
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <label class="control-label" name="note">
+                Note : UT* = Unassigned Tag
+                       UT_{user_id}_{count_of_unassigned_tags}
+            </label>
+            </div>
+            <div id="Transaction" class="content1 text-center">
+                <h2 style="text-align:center">Transaction</h2>
+                <div class="form-group">
+                    <div class="col-sm-2" style="padding-bottom:2px">
+                        <select id="ddlTagId" class="form-control">
+                            <option id="0" value="0" selected="selected">Select Tag ID</option>
+                            @foreach (var tag in Model.Tags)
+                            {
+                                if (tag.Tag_id != "NO")
+                                {
+                                    <option id="@tag.Tag_id" value="@tag.Tag_id">@tag.Tag_id</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-sm-3" style="padding-bottom:2px">
+                        <select id="ddlDtRange" class="form-control">
+                            <option id="dtr0" value="0" selected="selected">Select Date Range</option>
+                            <option id="dtr1" value="1">5 days Transactions</option>
+                            <option id="dtr2" value="2">Last 3 months Transactions</option>
+                            <option id="dtr3" value="3">Last 6 months Transactions</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2" style="padding-bottom:2px">
+                        <button type="button" onclick="select_onchange()">GO</button>
+                    </div>
+                    <table class="table text-center" id="tblTagTrans">
+                        <thead>
+                            <tr style="text-align:center">
+                                <td><b>Date</b></td>
+                                <td><b>Amount</b></td>
+                                <td><b>Balance</b></td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="Profile" class="content1 text-center">
+                <h2 style="text-align:center">Profile</h2>
+                <label class="control-label">
+                    =============******Welcome to Customer Profile*******==============
+                    <br />
+                </label>
+                <br />
+                <div class="col-sm-3"></div>
+                <div class="form-group">
+                     <label class="col-sm-12 text-left" id="lblName">Name: @Model.fname @Model.lname</label>
+                </div>
+                <div class="form-group">
+                         <strong><label class="col-sm-12 text-left" id="Username">Username:@Model.username</label></strong>
+                     </div>
+                <div class="form-group">
+                         <strong><label class="col-sm-12 text-left" id="DOB">D.O.B.: @Model.dob</label></strong>
+                         <label></label>
+                     </div>
+                <div class="form-group">
+                        <strong><label class="col-sm-6 text-left" id="Gender">Gender: @Model.gender</label></strong>
+                        <div class="col-md-12 text-left">
+                            <label></label>
+                        </div>
+                    </div>
+                <div class="form-group">
+                     <label class="col-sm-2 text-left">Mobile No.:</label>
+                     <div class="col-sm-2 text-left" style="padding-bottom:2px">
+                            <input id="txtMobile" type="text" class="form-control" placeholder="Mobile Number" value=@Model.mobileno name="mobilenumber" BorderStyle="none" />
+                        </div>
+                     <label class="col-sm-2 text-right">Email ID:</label>
+                     <div class="col-sm-4 text-left" style="padding-bottom:2px">
+                            <input id="txtEmail" type="text" class="form-control" placeholder="Email" value=@Model.emailid name="email" BorderStyle="none" />
+                        </div>
+                </div>
+                <div class="col-md-12 text-left">
+                     <label></label>
+                </div>
+                <div class="form-group">
+                     <label class="col-sm-2 text-left">Address:</label>
+                     <div class="col-sm-2 text-left" style="padding-bottom:2px">
+                        <input id="txtAddress" type="text" class="form-control" placeholder="Address" value=@Model.address name="address" BorderStyle="none" />
+                    </div>
+                </div>
+                <div class="col-md-12 text-left">
+                    <label></label>
+                </div>
+                <div class="form-group">
+                     <label class="col-sm-2 text-left">Security Question:</label>
+                        <div class="col-sm-5 text-left" style="padding-bottom:2px">
+                            <select id="ddlSecurityQuestion" class="form-control">
+                                <option id="0" value="0">Security Question</option>
+                                <option id="1" value="1" selected="selected">In what year was your father born?</option>
+                                <option id="2" value="2">What time of the day were you born? (hh:mm)</option>
+                                <option id="3" value="3">In what city or town does your nearest sibling live?</option>
+                                <option id="4" value="4">What was the name of your elementary / primary school?</option>
+                                <option id="5" value="5">What is your pet's name?</option>
+                                <option id="6" value="6">What is your favourite car ?</option>
+                                <option id="7" value="7">What is your favourite book ?</option>
+                            </select>
+                        </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 text-left">Security Answer:</label>
+                    <div class="col-sm-2 text-left" style="padding-bottom:2px">
+                        <input id="txtSecurityAnswer" type="text" class="form-control" placeholder="Security Answer" value=@Model.sa name="SecurityAnswer" BorderStyle="none" />
+                    </div>
+                </div>
+                <div class="col-md-8 text-left">
+                        <strong><label>Image</label></strong>
+                        <input id="FileUpload1" type="file" />
+                        <input id="btnsetimg" type="button" onclick="previewFile()" value="Preview" />
+                        <input id="btnsaveimg" type="button" onclick="saveFile()" value="Save" />
+                    </div>
+                <div class="col-md-12 text-right">
+                        <div style="text-align:center;color:black ; margin:20px;"> Do you want to Reset Password ? <a href="../ForgotPassword/ForgotPassword?User_type=1">click here</a></div>
+                    </div>
+            </div>
+            <div id="HelpDesk" class="content1 text-center">
+                <h2 style="text-align:center">Help Desk</h2>
+                <div class="col-md-3"></div>
+                <div class="form-group">
+                    <label class="col-md-12 text-left" id="helpdeskcontact">Demo Data</label>
+                    <label class="" id="helpdeskcontact">In the centre</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function payForNewTag() 
+    {
+        window.location.href = "../CustomerMain/PayNewTag?cuid=@Model.cuid&wantPostal=" + $("#rad1")[0].checked
+    }
+    function payforrecharge(e) {
+        var btn = e.currentTarget;
+        var tr = $(btn).closest("tr");
+        var tagid = tr.find("label").text();
+        var amt = tr.find("input").val();
+        if ($.isNumeric(amt)) {
+            window.location.href = "../CustomerMain/PayTagRecharge?cuid=@Model.cuid&amount=" + amt + "&tag_id=" + tagid;
+        }
+    }
+    function previewFile()
+    {
+        var preview = document.querySelector('img');
+        var file = document.querySelector('input[type=file]').files[0];
+        var reader = new FileReader();
+
+        reader.onloadend = function () {preview.src = reader.result; }
+
+        if (file)
+        {
+            reader.readAsDataURL(file); //reads the data as a URL
+        }
+        else
+        {
+            preview.src = "";
+        }
+    }
+
+    function saveFile()
+    {
+       // Checking whether FormData is available in browser
+       if (window.FormData !== undefined)
+       {
+            var fileUpload = $("#FileUpload1")[0];
+            var files = fileUpload.files;
+            var reader = new FileReader();
+            var preview = document.querySelector('img');
+            reader.onloadend = function () {preview.src = reader.result; }
+
+            if (files[0]) {
+                reader.readAsDataURL(files[0]); //reads the data as a URL
+            } else {
+                preview.src = "";
+            }
+            // Create FormData object
+            var fileData = new FormData();
+            //// Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++)
+            {
+                fileData.append(files[i].name, files[i]);
+            }
+                    var sqe = $("#ddlSecurityQuestion").val();
+                    if (sqe == '')
+                    {
+                        alert("empty");
+                    }
+                    var sqa = $("#txtSecurityAnswer").val();
+                    if (sqa == '')
+                    {
+                        alert("empty");
+                    }
+                    var mobileno = $("#Mobile").val();
+                    var datatoupload = { cuid:'@Model.cuid', sq: sqe, sa: sqa, mobile: mobileno };
+                    fileData.append('formdata', JSON.stringify(datatoupload));
+
+                    $.ajax({
+                    url: '../CustomerMain/SaveData',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        alert(result);
+                    },
+                    error: function (err)
+                    {
+                        alert(err.statusText);
+                    }
+                    });
+                } else {
+                    alert("FormData is not supported.");
+                }
+        return false;
+    }
+    function select_onchange()
+    {
+        var ch = $("#ddlDtRange").val();
+        if (ch != "0")
+        {
+            jsonData = { tagid: $("#ddlTagId").val(), choice: ch }
+            var url = "../CustomerMain/GetTransactionForTagId";
+            $.ajax({
+                url: url,
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(jsonData),
+                type: 'POST',
+                success: function (data) {
+                    $('#tblTagTrans > tbody').empty();
+                    if (data.Success) {
+                        $("#tblTagTrans").show();
+                        for (var i = 0; i < data.Trans.length; i++) {
+                            var tr = '<tr>';
+                            tr += '<td width="33%"><label>' + data.Trans[i].Transaction_Time + '</label></td>';
+                            tr += '<td width="33%"><label>' + data.Trans[i].Transaction_amount + '</label></td>';
+                            tr += '<td width="33%"><label>' + data.Trans[i].Updated_Balance + '</label></td>';
+                            tr += '</tr>';
+                            $('#tblTagTrans > tbody').append(tr);
+                        }
+                    }
+                    else {
+                        $('#tblTagTrans').hide();
+                        alert("No transactions made on the associated Tag.");
+                    }
+                }
+            });
+        }
+    }
+    function cleanNewTag()
+    {
+        $("#rad1")[0].checked = true;
+        $("#rad2")[0].checked = false;
+    }
+    function cleanCurrentBalance() {
+
+    }
+    function cleanTransactions() {
+        $("#tblTagTrans").hide();
+        $("#ddlDtRange").val("0");
+        $("#ddlTagId").val("0");
+        $('#tblTagTrans > tbody').empty();
+    }
+    function cleanProfile() {
+
+    }
+    function cleanRecharge() {
+
+    }
+    $(document).ready(function () {
+        $("input[type=radio]").on("change", function (e) {
+            if ($(this)[0].checked) {
+                if ($(this)[0].id === 'rad1') {
+                    $("[name='withtrans']").show();
+                    $("[name='wotrans']").hide();
+                }
+                else {
+                    $("[name='withtrans']").hide();
+                    $("[name='wotrans']").show();
+                }
+            }
+        });
+        $('#PurchaseTag').hide();
+        $('#CurrentBalance').show();
+        $('#Recharge').hide();
+        $('#Transaction').hide();
+        $('#Profile').hide();
+        $('#HelpDesk').hide();
+
+        $('#PT').click(function () {
+            cleanNewTag();
+            $('#PurchaseTag').show();
+            $('#CurrentBalance').hide();
+            $('#Recharge').hide();
+            $('#Transaction').hide();
+            $('#Profile').hide();
+            $('#HelpDesk').hide();
+        });
+
+        $('#CB').click(function () {
+            cleanCurrentBalance()
+            $('#PurchaseTag').hide();
+            $('#CurrentBalance').show();
+            $('#Recharge').hide();
+            $('#Transaction').hide();
+            $('#Profile').hide();
+            $('#HelpDesk').hide();
+        });
+
+        $('#RC').click(function () {
+            cleanTransactions();
+            $('#PurchaseTag').hide();
+            $('#CurrentBalance').hide();
+            $('#Recharge').show();
+            $('#Transaction').hide();
+            $('#Profile').hide();
+            $('#HelpDesk').hide();
+        });
+
+        $('#TS').click(function () {
+            cleanTransactions();
+            $('#PurchaseTag').hide();
+            $('#CurrentBalance').hide();
+            $('#Recharge').hide();
+            $('#Transaction').show();
+            $('#Profile').hide();
+            $('#HelpDesk').hide();
+        });
+
+        $('#PF').click(function () {
+            cleanProfile();
+            $('#PurchaseTag').hide();
+            $('#CurrentBalance').hide();
+            $('#Recharge').hide();
+            $('#Transaction').hide();
+            $('#Profile').show();
+            $('#HelpDesk').hide();
+        });
+
+        $('#HD').click(function () {
+            cleanRecharge();
+            $('#PurchaseTag').hide();
+            $('#CurrentBalance').hide();
+            $('#Recharge').hide();
+            $('#Transaction').hide();
+            $('#Profile').hide();
+            $('#HelpDesk').show();
+        });
+
+        $('.sidenav1 li a').click(function (e) 
+        {
+            $('.sidenav1 li.active').removeClass('active');
+            var $parent = $(this).parent();
+            $parent.addClass('active');
+            e.preventDefault();
+        });
+         if ('@(ViewBag.status!= null)' == 'True')
+         {
+            alert('@ViewBag.status');
+         }
+    });
+</script>

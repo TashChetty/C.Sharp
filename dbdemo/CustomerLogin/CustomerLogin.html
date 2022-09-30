@@ -1,0 +1,222 @@
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc;
+@model WebApplication5.Models.CustomerLogin
+@{
+    Layout = null;
+}
+
+<title>Customer Login</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+    body {
+        background: url(../Images/login2.png) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+</style>
+
+
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+@using (Html.BeginForm("CustomerLogin", "CustomerLogin", FormMethod.Post, new { id = "loginform", role = "form" }))
+{
+    <text>
+        <div class="row" id="maindiv">
+
+            <div class="col-md-4 ">
+                <br />
+                <button type="button" class="btn btn-default" style="margin-left:10px" onclick="Home()">
+                    <span class="glyphicon glyphicon-arrow-left"></span> Back
+                </button>
+            </div>
+            <div class="col-md-4 vcenter" style="background:whitesmoke; padding: 40px; margin-top: 4%; font-size: large; box-shadow: 1px 1px 1px 1px;border-radius:25px">
+                <h2 style="text-align:center; color:black;font-family:'Palatino Linotype'"> <strong>Customer Login</strong></h2><br />
+
+                <div class="form-group">
+                    <div class="col-sm-12" style="padding-bottom:1px">
+                        <select id="ddlcustomerinput" onchange="CheckColors(this.value);" class="form-control">
+                            <option id="0" value="0" selected="selected">Select Any</option>
+                            <option id="1" value="1">Customer User Name</option>
+                            <option id="2" value="2">Customer Email Id</option>
+                            <option id="3" value="3">Customer Mobile Number</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12" style="padding-bottom:1px">
+                        @Html.TextBoxFor(o => o.User_id, new  { @class="form-control", placeholder="User Name", BorderStyle="none", Style="display: none;border-bottom: 1px groove;"  })
+                        @Html.ValidationMessageFor(o => o.User_id)
+                    </div>
+                    <div class="col-sm-12" style="padding-bottom:1px">
+                        <input id="txtEmail" type="text" class="form-control" placeholder="Email id" name="email"  BorderStyle="none" Style="display: none; border-bottom: 1px groove;" />
+                    </div>
+                    <div class="col-sm-12" style="padding-bottom:1px">
+                         <input id="txtMobileno" type="text" class="form-control" placeholder="Mobile Number" name="mobileno"  BorderStyle="none" Style="display: none; border-bottom: 1px groove;" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12" style="padding-bottom:1px">
+                        <input id="txtPassword" type="password" class="form-control" placeholder="Password" name="pwd" BorderStyle="none" Style="border-bottom: 1px groove;" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-offset-1 col-sm-10 text-center" style="padding-bottom:2px">
+                        @Html.MathCaptcha()
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class=" col-sm-12">
+                        <button type="button" class="btn btn-primary btn-block" onclick="Login()" style="background-color:black;border-radius:25px">Login</button>
+                    </div>
+                </div>
+                <div style="text-align:center;color:black ; margin:20px;"> Forgot Password? <a href="../ForgotPassword/ForgotPassword?User_type=1">Click Here</a></div>
+                <div style="text-align:center;color:black ; margin:20px;">New Customer? <a style="color:black" href="../CustomerRegistration/CustomerRegistration"> Register </a></div>
+            </div>
+    </div>
+  </text>
+}
+
+<script type="text/javascript">
+function CheckColors(val)
+{
+    var unique  = document.getElementById('@Html.IdFor(o => o.User_id)');
+    var email   = document.getElementById('txtEmail');
+    var mob     = document.getElementById('txtMobileno');
+    if (val == '0')
+    {
+        unique.style.display = 'none';
+        email.style.display  = 'none';
+        mob.style.display    = 'none';
+    }
+    else if (val == '1') 
+    {
+        unique.style.display = '';
+        email.style.display  = 'none';
+        mob.style.display    = 'none';
+    }
+    else if (val == '2') 
+    {
+        unique.style.display = 'none';
+        email.style.display  = '';
+        mob.style.display    = 'none';
+    }
+    else 
+    {
+        unique.style.display = 'none';
+        email.style.display  = 'none';
+        mob.style.display    = '';
+    }
+}
+function Home()
+{
+    window.location.href = "../HomeNavigate/HomeNavigate";
+}
+
+function check_form_data(o) 
+{
+   var loginMode = $('#ddlcustomerinput').val();
+   var userChoiceData = null;
+   if (loginMode != 0)
+   {
+      if (loginMode == 1)
+      {
+         userChoiceData = $('#@Html.IdFor(o=>o.User_id)').val();
+         if (userChoiceData.trim() == "")
+         {
+             alert("User Name is Required");
+             return {isSuccess:false, LoginMode:null, UserChoiceData: null};
+         }
+      }
+      else if (loginMode == 2)
+      {
+           userChoiceData = $('#txtEmail').val();
+           if (userChoiceData.trim() == "") {
+               alert("Email ID is Required");
+               return { isSuccess: false, LoginMode: null, UserChoiceData: null };
+           }
+       }
+       else if (loginMode == 3)
+       {
+           userChoiceData = $('#txtMobileno').val();
+           if (userChoiceData.trim() == "")
+           {
+               alert("Mobile Number is Required");
+               return { isSuccess: false, LoginMode: null, UserChoiceData: null };
+           }
+       }
+   }
+   else
+   {
+       alert("Please select User Login Type");
+       return { isSuccess: false, LoginMode: null, UserChoiceData: null };
+   }
+   return { isSuccess: true, LoginMode: loginMode, UserChoiceData: userChoiceData };
+}
+
+function Login()
+{
+   var UserChoiceData = "";
+   var form = $("#loginform");
+   form.validate();
+   if (form.valid())
+   {
+       var resout = check_form_data();
+       if (!resout.isSuccess)
+           return false;
+
+       var password = $('#txtPassword').val();
+       if (password.trim() == "")
+       {
+          alert("Password is Required");
+          return false;
+       }
+
+       var jsonData = { User_id:resout.UserChoiceData.trim(), Password: password, LoginMode: resout.LoginMode };
+       var sdata = JSON.stringify(jsonData);
+
+       var url = '../CustomerLogin/CustomerLogin';
+       $.ajax({
+       url: url,
+       contentType: 'application/json',
+       dataType: 'json',
+       type: 'POST',
+       data: sdata,
+       success: function (data) 
+       {
+          if (data.Success) 
+          {
+              window.location.href = "../CustomerMain/CustomerMain";
+          }
+          else
+          {
+              if (data.msg == "Invalid Username or Username does not exist !!")
+              {
+                  alert(data.msg);
+                  $('#txtUniqueid').val('');
+                  $("#txtPassword").val('');
+              }
+              else
+              {
+                  alert(data.msg);
+                  $("#txtPassword").val('');
+              }
+          }
+       },
+       error: function (data)
+       {
+           $('#txtUniqueid').focus();
+           $("#txtPassword").val('');
+       }
+     });
+   }
+}
+</script>

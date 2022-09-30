@@ -1,0 +1,384 @@
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc;
+@using WebApplication5.Models;
+@using WebApplication5.App_Start;
+
+@model WebApplication5.Models.CustomerRegistration
+
+@{
+    Layout = null;
+}
+
+<link href="@Url.Content("~/Content/themes/base/minified/jquery-ui.min.css")" rel="stylesheet" />
+<!-- Required jQuery and jQuery UI Javascript references -->
+<script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui-1.10.4.min.js")"></script>
+
+<title>Customer Registration</title>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<!-- script src="//code.jquery.com/jquery-1.10.2.js"></!--script -->
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<style>
+    body {
+        background: url(../Images/login2.png) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+</style>
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+<div class="row" id="registration">
+    <div class="col-md-4 vcenter text-center"></div>
+    <div class="col-md-5 vcenter" style="background-color: whitesmoke; padding: 20px 20px; margin-top:1%; border-radius:30px ;font-size: large; box-shadow: 1px 1px 1px 1px;">
+        <h2 style="text-align: center; font-family:'Palatino Linotype'"><strong>Customer Registration</strong></h2><br />
+        <div class="form-group">
+            <div class="col-sm-2" style="padding-bottom:2px">
+                <select id="ddlSalute" onchange="CheckColors(this.value);" class="form-control">
+                    <option id="0" value="0" selected="selected">Title</option>
+                    <option id="1" value="1">Mr.</option>
+                    <option id="2" value="2">Mrs.</option>
+                    <option id="3" value="3">Ms.</option>
+                    <option id="4" value="4">Dr.</option>
+                    <option id="5" value="5">Sir</option>
+                    <option id="6" value="6">Lt.</option>
+                </select>
+            </div>
+            <div class="col-sm-6" style="padding-bottom:2px">
+                @Html.TextBoxFor(o => o.firstname, new { Style = "border-bottom: 1px groove;", @class = "form-control", placeholder = "First Name", BorderStyle = "none" })
+            </div>
+            <div class="col-sm-4" style="padding-bottom:2px">
+                @Html.TextBoxFor(o => o.surname, new { Style = "border-bottom: 1px groove;", @class = "form-control", placeholder = "Last Name", BorderStyle = "none" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12" style="padding-bottom:2px">
+                @Html.TextBoxFor(o => o.username, new { Style = "border-bottom: 1px groove;", @class = "form-control", placeholder = "User Name", BorderStyle = "none" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12" style="padding-bottom:2px">
+                @Html.TextBoxFor(o => o.emailid, new { Style = "border-bottom: 1px groove;", @class = "form-control", placeholder = "Email Id", BorderStyle = "none" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12" style="padding-bottom:2px">
+                @Html.TextBoxFor(o => o.mobileno, new { Style = "border-bottom: 1px groove;", @class = "form-control", placeholder = "Mobile Number", BorderStyle = "none" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6" style="padding-bottom:2px">
+                <select id="ddlGender" onchange="CheckColors(this.value);" class="form-control">
+                    <option id="0" value="0" selected="selected">Gender</option>
+                    <option id="1" value="1">Male</option>
+                    <option id="2" value="2">Female</option>
+                    <option id="3" value="3">Others</option>
+                </select>
+            </div>
+            <div class="col-sm-6" style="padding-bottom:2px">
+                @Html.TextBoxFor(o => o.dob, new { Style = "border-bottom: 1px groove;", @class = "date-picker form-control", placeholder = "Date Of Birth", BorderStyle = "none" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12" style="padding-bottom:2px">
+                @Html.TextAreaFor(o => o.address, new { Style = "border-bottom: 1px groove;", rows = "2", @class = "form-control", placeholder = "Address", BorderStyle = "none" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6" style="padding-bottom:2px">
+                <select id="ddlState" class="form-control" onchange="select_onchange(this);">
+                    <option id="0" value="0" selected="selected">State</option>
+                    @foreach (var state in ViewBag.StateList)
+                    {
+                    <option id="@state" value="@state">@state</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-6" style="padding-bottom:2px">
+                <select id="ddlDistrict" class="form-control" onchange="select_onchange1(this);">
+                    <option id="0" value="0" selected="selected">District</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-6" style="padding-bottom:2px">
+                @Html.PasswordFor(o => o.password, new { Style = "border-bottom: 1px groove;", @class = "form-control", placeholder = "Password", BorderStyle = "none" })
+            </div>
+            <div class="col-sm-6" style="padding-bottom:2px">
+                @Html.PasswordFor(o => o.confirmpassword, new { Style = "border-bottom: 1px groove;", @class = "form-control", placeholder = "Confirm Password", BorderStyle = "none" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-9" style="padding-bottom:2px">
+                <select id="ddlSecurityQuestion" onchange="CheckColors(this.value);" class="form-control">
+                    <option id="0" value="0" selected="selected">Security Question</option>
+                    <option id="1" value="1">In what year was your father born?</option>
+                    <option id="2" value="2">What time of the day were you born? (hh:mm)</option>
+                    <option id="3" value="3">In what city or town does your nearest sibling live?</option>
+                    <option id="4" value="4">What was the name of your elementary / primary school?</option>
+                    <option id="5" value="5">What is your pet's name?</option>
+                </select>
+            </div>
+            <div class="col-sm-3" style="padding-bottom:2px">
+                @Html.TextBoxFor(o => o.securityanswer, new { Style = "border-bottom: 1px groove;", @class = "form-control", placeholder = "Security Answer", BorderStyle = "none" })
+            </div>
+        </div>
+
+        <div>
+            <div class="col-md-12" style="padding-bottom:2px">
+                <input type="file" name="file" id="image" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-offset-1 col-sm-10 text-center" style="padding-bottom:2px">
+                @Html.MathCaptcha()
+            </div>
+        </div>
+        <div class="form-group">
+            <div class=" col-sm-12 ">
+                <button type="submit" class="btn btn-primary btn-block" onclick="SendOTP()" style="background-color:black;border-radius:25px">Register</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="MailVerification">
+     <div class="col-md-4 vcenter text-center"></div>
+
+     <div class="col-md-4" style="background-color: whitesmoke; padding: 20px 20px; margin-top:1%;  font-size: large; box-shadow: 1px 1px 1px 1px;border-radius:25px">
+
+        <h2 style="text-align: center;font-family:'Palatino Linotype';padding-bottom:10px;font-size:x-large"><strong>Mail Verification</strong></h2>
+        <hr />
+        <div class="form-group">
+        </div>
+        <div class="form-group ">
+            <div class="text-left" style="padding-left:58px">
+                @Html.Label("Enter OTP sent to your registered E-Mail Id.", new { @style = "font-size:0.80em" })
+            </div>
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <input id="OTP" type="text" class="form-control" placeholder="OTP" name="OTP" BorderStyle="none" Style="border-bottom: 1px groove;" />
+                        <input type="hidden" value="@Session["OTP"]" id="myotp" />
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class=" col-sm-12 " style="padding-top:4px">
+                <button type="submit" class="btn btn-primary btn-block" style="background-color:black;border-radius:25px" onclick="Register()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#MailVerification').hide();
+    });
+</script>
+
+<script type="text/javascript">
+
+    function select_onchange1(sel1) {
+        var district1 = sel1.value.trim();
+    }
+
+    function select_onchange(sel) {
+        var state1 = sel.value.trim();
+        jsonData = { 'state': state1 };
+
+        sdata = JSON.stringify(jsonData);
+        var url = '../CustomerRegistration/CustomerDistrict';
+
+        var countDistrict;
+        $.ajax({
+            url: url,
+            contentType: 'application/json',
+            dataType: 'json',
+            data: sdata,
+            type: 'POST',
+            success: function (data) {
+                if (data.Success) {
+                    countDistrict = data.count_district;
+                    $('#ddlDistrict').find('option').remove().end();
+                    for (var i = 0; i <= countDistrict - 1; i++) {
+                        $('#ddlDistrict').append('<option value="' + data.district[i] + '">' + data.district[i] + '</option>');
+                    }
+                }
+                else {
+                    $('#ddlDistrict').find('option').remove().end();
+                    $('#ddlDistrict').append('<option value="0">District</option>');
+                }
+            }
+        });
+    }
+
+    function CheckColors(o) {
+        return true;
+    }
+    function Register() {
+        var newotp = $('#OTP').val();
+        var otp1 = otp;
+        if (newotp.trim() == "") {
+            alert("OTP is Required");
+            return false;
+        }
+        if (newotp == otp) {
+            var url = '../CustomerRegistration/CustomerDetailInsert';
+            $.ajax({
+                    url: url,
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: sdata,
+                    type: 'POST',
+                    success: function (data) {
+                        if (data.Success) {
+                            alert("Registration Successful");
+                            if ('@ViewBag.Reg_caller'==='sp')
+                                window.location.href = "../ServiceProviderMain/ServiceProviderMain?custreg=Success";
+                            else
+                            window.location.href = "../CustomerLogin/CustomerLogin";
+                        }
+                        else {
+                            $('#@Html.IdFor(o => o.username)').focus();
+                            $('#@Html.IdFor(o => o.password)').val('');
+                            alert(data.Message);
+                        }
+                    },
+                    error: function (data) {
+                        ;
+                        $('#@Html.IdFor(o => o.username)').focus();
+                        $('#@Html.IdFor(o => o.password)').val('');
+                    }
+                });
+        }
+        else {
+            alert("Please enter valid OTP");
+            $("#OTP").val('');
+        }
+    }
+</script>
+
+<script>
+    var otp = "";
+    var jsondata = "";
+    var sdata = "";
+    function SendOTP()
+    {
+        var txtFname         =  $('#@Html.IdFor(o=>o.firstname)').val();
+        var txtLname         =  $('#@Html.IdFor(o=>o.surname)').val();
+        var txtEmail         =  $('#@Html.IdFor(o=>o.emailid)').val();
+        var txtMobileno      =  $('#@Html.IdFor(o=>o.mobileno)').val();
+        var txtUsername      =  $('#@Html.IdFor(o => o.username)').val();
+        var dob              =  $('#@Html.IdFor(o => o.dob)').val();
+        var address          =  $('#@Html.IdFor(o => o.address)').val();
+        var state            =  $('#ddlState').val();
+        var district         =  $('#ddlDistrict').val();
+        var password         =  $('#@Html.IdFor(o => o.password)').val();
+        var confirmpassword  =  $('#@Html.IdFor(o => o.confirmpassword)').val();
+        var gender           =  $('#ddlGender>option:selected').text();
+        var securityquestion =  $('#ddlSecurityQuestion').val();
+        var securityanswer   =  $('#@Html.IdFor(o => o.securityanswer)').val();
+        var image            =  $('#image').val();
+        var salutation       =  $('#ddlSalute>option:selected').text();
+
+        if (password == confirmpassword) {
+            var txtpassword = password;
+        }
+        else {
+            alert("Password and Confirm Password Doesn't match");
+            return false;
+        }
+        if (txtFname.trim() == "") {
+            alert("First Name is Required");
+            return false;
+        }
+        if (txtLname.trim() == "") {
+            alert("Last Name is Required");
+            return false;
+        }
+        if (txtEmail.trim() == "") {
+            alert("Email Id is Required");
+            return false;
+        }
+        if (txtMobileno.trim().length !=10) {
+            alert("Valid Mobile Number is Required");
+            return false;
+        }
+        if (txtUsername.trim() == "") {
+            alert("User Name is Required");
+            return false;
+        }
+        if (address.trim() == "") {
+            alert("Address is Required");
+            return false;
+        }
+        if (txtpassword.trim() == "") {
+            alert("Password is Required");
+            return false;
+        }
+        if (confirmpassword.trim() == "") {
+            alert("Confirm Password is Required");
+            return false;
+        }
+        if (gender.trim() == "") {
+            alert("Gender is Required");
+            return false;
+        }
+        if (dob.trim() == "") {
+            alert("Date of Birth is Required");
+            return false;
+        }
+        if (securityanswer.trim() == "") {
+            alert("Security Answer is Required");
+            return false;
+        }
+        jsonData = { state: state, district: district, address: address, firstname: txtFname, surname: txtLname, emailid: txtEmail, mobileno: txtMobileno, username: txtUsername, password: txtpassword, gender: gender, DOB: dob, securityquestion: securityquestion, securityAnswer: securityanswer, image: image, salutation: salutation }
+        sdata = JSON.stringify(jsonData);
+
+        var url = '../CustomerRegistration/MailVerification';
+        $.ajax({
+            url: url,
+            contentType: 'application/json',
+            dataType: 'json',
+            type: 'POST',
+            data: sdata,
+            success: function (data) {
+                alert(data.messag);
+                if (data.Success)
+                {
+                    otp = data.otp;
+                    $('#registration').hide();
+                    $('#MailVerification').show();
+                }
+                else { 
+                     $('#@Html.IdFor(o=>o.emailid)').focus().val('');
+                }
+            },
+            error: function (data) {
+                 $('#@Html.IdFor(o=>o.emailid)').focus().val('');
+                 alert("Please enter valid email-id");
+            }
+        });
+
+    }
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('.date-picker').datepicker();
+    });
+</script>
