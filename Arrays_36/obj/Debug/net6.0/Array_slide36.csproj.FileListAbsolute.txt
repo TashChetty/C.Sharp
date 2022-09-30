@@ -1,0 +1,5 @@
+C:\Users\ChettyNa\Desktop\IFundi\Back End - Saroj\Csharp_practise\Array_slide36\obj\Debug\net6.0\Array_slide36.csproj.AssemblyReference.cache
+C:\Users\ChettyNa\Desktop\IFundi\Back End - Saroj\Csharp_practise\Array_slide36\obj\Debug\net6.0\Array_slide36.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ChettyNa\Desktop\IFundi\Back End - Saroj\Csharp_practise\Array_slide36\obj\Debug\net6.0\Array_slide36.AssemblyInfoInputs.cache
+C:\Users\ChettyNa\Desktop\IFundi\Back End - Saroj\Csharp_practise\Array_slide36\obj\Debug\net6.0\Array_slide36.AssemblyInfo.cs
+C:\Users\ChettyNa\Desktop\IFundi\Back End - Saroj\Csharp_practise\Array_slide36\obj\Debug\net6.0\Array_slide36.csproj.CoreCompileInputs.cache
